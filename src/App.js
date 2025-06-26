@@ -97,6 +97,11 @@ function TodoList() {
     return true;
   });
 
+  // Task counts
+  const totalAll = tasks.length;
+  const totalCompleted = tasks.filter((t) => t.completed).length;
+  const totalIncomplete = tasks.filter((t) => !t.completed).length;
+
   return (
     <Container maxWidth="sm" sx={{
       py: 8,
@@ -200,21 +205,21 @@ function TodoList() {
           </Box>
           <Stack direction="row" spacing={2} justifyContent="center" sx={{ mb: 4 }}>
             <Chip
-              label="All"
+              label={`All (${totalAll})`}
               color={filter === 'all' ? 'primary' : 'default'}
               onClick={() => setFilter('all')}
               variant={filter === 'all' ? 'filled' : 'outlined'}
               sx={{ fontWeight: 700, fontSize: 17, px: 2.5, borderRadius: 4, boxShadow: filter === 'all' ? '0 2px 8px #6366f133' : 'none' }}
             />
             <Chip
-              label="Completed"
+              label={`Completed (${totalCompleted})`}
               color={filter === 'completed' ? 'primary' : 'default'}
               onClick={() => setFilter('completed')}
               variant={filter === 'completed' ? 'filled' : 'outlined'}
               sx={{ fontWeight: 700, fontSize: 17, px: 2.5, borderRadius: 4, boxShadow: filter === 'completed' ? '0 2px 8px #22d3ee33' : 'none' }}
             />
             <Chip
-              label="Incomplete"
+              label={`Incomplete (${totalIncomplete})`}
               color={filter === 'incomplete' ? 'primary' : 'default'}
               onClick={() => setFilter('incomplete')}
               variant={filter === 'incomplete' ? 'filled' : 'outlined'}
