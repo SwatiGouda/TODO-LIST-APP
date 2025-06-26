@@ -65,6 +65,8 @@ function TodoList() {
         name: taskName,
         desc: taskDesc,
         completed: false,
+        createdAt: new Date().toISOString(),
+        completedAt: null,
       },
     ]);
     setTaskName('');
@@ -82,8 +84,10 @@ function TodoList() {
               origin: { y: 0.6 },
               zIndex: 9999,
             });
+            return { ...task, completed: true, completedAt: new Date().toISOString() };
+          } else {
+            return { ...task, completed: false, completedAt: null };
           }
-          return { ...task, completed: !task.completed };
         }
         return task;
       });
@@ -119,6 +123,13 @@ function TodoList() {
   const totalAll = tasks.length;
   const totalCompleted = tasks.filter((t) => t.completed).length;
   const totalIncomplete = tasks.filter((t) => !t.completed).length;
+
+  // Helper to format time
+  const formatTime = (isoString) => {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
 
   return (
     <Container maxWidth="sm" sx={{
@@ -263,6 +274,16 @@ function TodoList() {
                         {task.desc}
                       </Typography>
                     )}
+                    <Stack direction="row" spacing={2} sx={{ mt: 0.5 }}>
+                      <Typography variant="caption" color="text.secondary">
+                        Added: {formatTime(task.createdAt)}
+                      </Typography>
+                      {task.completed && task.completedAt && (
+                        <Typography variant="caption" color="success.main">
+                          Completed: {formatTime(task.completedAt)}
+                        </Typography>
+                      )}
+                    </Stack>
                   </Box>
                   <Tooltip title="Delete Task">
                     <IconButton edge="end" aria-label="delete" color="error" onClick={() => handleDeleteTask(task.id)} sx={{ borderRadius: 3, fontSize: 24 }}>
