@@ -7,10 +7,12 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
+    "canvas-confetti": "^1.9.3",
     "cra-template-pwa": "2.0.0",
     "i": "^0.3.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
     "react-scripts": "^5.0.1",
     "web-vitals": "^5.0.3"
   },

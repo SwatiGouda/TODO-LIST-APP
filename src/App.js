@@ -17,14 +17,18 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Welcome from './Welcome';
+import confetti from 'canvas-confetti';
 
-function App() {
+function TodoList() {
   const [tasks, setTasks] = useState([]);
   const [taskName, setTaskName] = useState('');
   const [taskDesc, setTaskDesc] = useState('');
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const stored = localStorage.getItem('tasks');
@@ -37,14 +41,16 @@ function App() {
       console.log('No tasks found in localStorage.');
     }
     setLoading(false);
-    setHasLoaded(true);
+    const storedName = localStorage.getItem('username');
+    if (storedName) setUsername(storedName);
+    setFirstLoad(false);
   }, []);
 
   useEffect(() => {
-    if (!hasLoaded) return;
+    if (firstLoad) return;
     console.log('Saving to localStorage:', tasks);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks, hasLoaded]);
+  }, [tasks, firstLoad]);
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -63,11 +69,22 @@ function App() {
   };
 
   const handleToggleComplete = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
+    setTasks((prevTasks) => {
+      return prevTasks.map((task) => {
+        if (task.id === id) {
+          if (!task.completed) {
+            confetti({
+              particleCount: 80,
+              spread: 70,
+              origin: { y: 0.6 },
+              zIndex: 9999,
+            });
+          }
+          return { ...task, completed: !task.completed };
+        }
+        return task;
+      });
+    });
   };
 
   const handleDeleteTask = (id) => {
@@ -102,9 +119,14 @@ function App() {
         backdropFilter: 'blur(2px)',
       }}>
         <CardContent>
-          <Typography variant="h3" align="center" sx={{ fontWeight: 900, mb: 4, color: '#23272f', letterSpacing: 1, fontFamily: 'Montserrat, sans-serif' }}>
+          <Typography variant="h3" align="center" sx={{ fontWeight: 900, mb: 2, color: '#23272f', letterSpacing: 1, fontFamily: 'Montserrat, sans-serif' }}>
             ToDo List
           </Typography>
+          {username && (
+            <Typography variant="h6" align="center" sx={{ mb: 2, color: '#6366f1', fontWeight: 700, letterSpacing: 0.5 }}>
+              Welcome, {username}!
+            </Typography>
+          )}
           <Box component="form" onSubmit={handleAddTask} sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 5 }}>
             <TextField
               label="Task name"
@@ -240,6 +262,17 @@ function App() {
         Made by Swati Gouda
       </Typography>
     </Container>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/todo" element={<TodoList />} />
+      </Routes>
+    </Router>
   );
 }
 
