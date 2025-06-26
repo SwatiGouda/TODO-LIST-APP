@@ -12,7 +12,11 @@ import {
   Box,
   Chip,
   Divider,
-  Tooltip
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -28,7 +32,8 @@ function TodoList() {
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [firstLoad, setFirstLoad] = useState(true);
-  const [username, setUsername] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   useEffect(() => {
     const stored = localStorage.getItem('tasks');
@@ -41,8 +46,6 @@ function TodoList() {
       console.log('No tasks found in localStorage.');
     }
     setLoading(false);
-    const storedName = localStorage.getItem('username');
-    if (storedName) setUsername(storedName);
     setFirstLoad(false);
   }, []);
 
@@ -88,7 +91,22 @@ function TodoList() {
   };
 
   const handleDeleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+    const task = tasks.find((t) => t.id === id);
+    setTaskToDelete(task);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (taskToDelete) {
+      setTasks(tasks.filter((task) => task.id !== taskToDelete.id));
+    }
+    setDeleteDialogOpen(false);
+    setTaskToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setTaskToDelete(null);
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -127,11 +145,6 @@ function TodoList() {
           <Typography variant="h3" align="center" sx={{ fontWeight: 900, mb: 2, color: '#23272f', letterSpacing: 1, fontFamily: 'Montserrat, sans-serif' }}>
             ToDo List
           </Typography>
-          {username && (
-            <Typography variant="h6" align="center" sx={{ mb: 2, color: '#6366f1', fontWeight: 700, letterSpacing: 0.5 }}>
-              Welcome, {username}!
-            </Typography>
-          )}
           <Box component="form" onSubmit={handleAddTask} sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 5 }}>
             <TextField
               label="Task name"
@@ -266,6 +279,20 @@ function TodoList() {
       <Typography variant="body2" align="center" sx={{ color: '#888', mt: 5, fontWeight: 600, letterSpacing: 0.7, fontFamily: 'Montserrat, sans-serif', fontSize: 15 }}>
         Made by Swati Gouda
       </Typography>
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
+        <DialogTitle sx={{ fontWeight: 900, color: '#e11d48', fontFamily: 'Montserrat, sans-serif' }}>Delete Task</DialogTitle>
+        <DialogContent>
+          <Typography sx={{ fontWeight: 500, fontSize: 18, mb: 1 }}>
+            Are you sure you want to delete the task
+            <span style={{ color: '#6366f1', fontWeight: 700 }}> "{taskToDelete?.name}"</span>?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} sx={{ color: '#6366f1', fontWeight: 700 }}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} sx={{ color: '#e11d48', fontWeight: 700 }}>Delete</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
