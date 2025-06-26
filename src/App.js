@@ -23,17 +23,28 @@ function App() {
   const [taskName, setTaskName] = useState('');
   const [taskDesc, setTaskDesc] = useState('');
   const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('tasks');
     console.log('Loaded from localStorage:', stored);
-    if (stored) setTasks(JSON.parse(stored));
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      console.log('Parsed tasks from localStorage:', parsed);
+      setTasks(parsed);
+    } else {
+      console.log('No tasks found in localStorage.');
+    }
+    setLoading(false);
+    setHasLoaded(true);
   }, []);
 
   useEffect(() => {
+    if (!hasLoaded) return;
     console.log('Saving to localStorage:', tasks);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
+  }, [tasks, hasLoaded]);
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -143,7 +154,7 @@ function App() {
           </Stack>
           <Divider sx={{ mb: 2, borderRadius: 4 }} />
           <Stack spacing={1.5} sx={{ minHeight: 120 }}>
-            {filteredTasks.length === 0 && (
+            {(!loading && filteredTasks.length === 0) && (
               <Typography align="center" color="text.secondary" sx={{ fontSize: 18, fontWeight: 400 }}>
                 No tasks yet.
               </Typography>
