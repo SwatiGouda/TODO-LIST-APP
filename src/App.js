@@ -38,13 +38,9 @@ function TodoList() {
 
   useEffect(() => {
     const stored = localStorage.getItem('tasks');
-    console.log('Loaded from localStorage:', stored);
     if (stored) {
       const parsed = JSON.parse(stored);
-      console.log('Parsed tasks from localStorage:', parsed);
       setTasks(parsed);
-    } else {
-      console.log('No tasks found in localStorage.');
     }
     setLoading(false);
     setFirstLoad(false);
@@ -52,7 +48,6 @@ function TodoList() {
 
   useEffect(() => {
     if (firstLoad) return;
-    console.log('Saving to localStorage:', tasks);
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks, firstLoad]);
 

@@ -1,4 +1,4 @@
-/* Minimalist, modern, refined styles for the ToDo app */
+
 body {
   min-height: 100vh;
   margin: 0;
@@ -14,24 +14,20 @@ body {
   flex-direction: column;
 }
 
-/* Remove old .App background and centering */
+
 .App {
-  /* No background, no forced centering */
-}
 
-/* Remove old .todo-form styles, let MUI handle layout */
+}
 .todo-form {
-  /* No background, no box-shadow, no border-radius */
-  /* MUI Box and sx props will handle spacing and layout */
+
 }
 
-/* Remove old button and input styles */
+
 .todo-form input[type="text"],
 .todo-form button {
   all: unset;
 }
 
-/* Task List - let MUI handle most, but add spacing */
 .todo-list {
   list-style: none;
   padding: 0;
@@ -42,7 +38,7 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* Task Info - minimalist */
+
 .task-info {
   display: flex;
   flex-direction: column;
@@ -67,17 +63,16 @@ body {
   color: #bdbdbd;
 }
 
-/* Hide old delete button styles, use MUI */
+
 .delete-btn {
   display: none;
 }
 
-/* Hide old filter button styles, use MUI */
+
 .filters {
   display: none;
 }
 
-/* Responsive tweaks */
 @media (max-width: 600px) {
   .todo-form {
     flex-direction: column;
