@@ -21,6 +21,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Welcome from './Welcome';
 import confetti from 'canvas-confetti';
@@ -301,17 +302,60 @@ function TodoList() {
         Made by Swati Gouda
       </Typography>
       {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
-        <DialogTitle sx={{ fontWeight: 900, color: '#e11d48', fontFamily: 'Montserrat, sans-serif' }}>Delete Task</DialogTitle>
-        <DialogContent>
-          <Typography sx={{ fontWeight: 500, fontSize: 18, mb: 1 }}>
-            Are you sure you want to delete the task
-            <span style={{ color: '#6366f1', fontWeight: 700 }}> "{taskToDelete?.name}"</span>?
+      <Dialog 
+        open={deleteDialogOpen} 
+        onClose={handleCancelDelete}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            maxWidth: 320,
+            mx: 'auto',
+            border: '2px solid #f59e42',
+            boxShadow: '0 4px 24px #f59e4233',
+            p: 1.5,
+          }
+        }}
+      >
+        <DialogTitle sx={{
+          fontWeight: 900,
+          color: '#e11d48',
+          fontFamily: 'Montserrat, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          fontSize: 18,
+          px: 1,
+          pt: 1.5,
+          pb: 0.5,
+        }}>
+          <WarningAmberRoundedIcon sx={{ color: '#f59e42', fontSize: 24, mr: 1 }} />
+          Delete Task
+        </DialogTitle>
+        <DialogContent sx={{ pb: 0.5, pt: 0.5, px: 1 }}>
+          <Typography sx={{ fontWeight: 600, fontSize: 15, color: '#23272f', textAlign: 'center' }}>
+            Are you sure you want to delete
+            <span style={{ color: '#6366f1', fontWeight: 800 }}> "{taskToDelete?.name}"</span>?
           </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete} sx={{ color: '#6366f1', fontWeight: 700 }}>Cancel</Button>
-          <Button onClick={handleConfirmDelete} sx={{ color: '#e11d48', fontWeight: 700 }}>Delete</Button>
+        <DialogActions sx={{ justifyContent: 'center', pb: 1, pt: 0, gap: 1 }}>
+          <Button
+            onClick={handleCancelDelete}
+            variant="outlined"
+            color="primary"
+            sx={{ fontWeight: 700, borderRadius: 2, px: 2, fontSize: 14, minWidth: 80 }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            color="error"
+            sx={{ fontWeight: 700, borderRadius: 2, px: 2, fontSize: 14, minWidth: 80, boxShadow: '0 2px 8px #e11d4822' }}
+          >
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>
