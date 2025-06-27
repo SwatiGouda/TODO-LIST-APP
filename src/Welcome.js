@@ -13,9 +13,10 @@ function Welcome() {
     if (!name.trim()) return;
     localStorage.setItem('username', name);
     setGreet(true);
-    setTimeout(() => {
-      navigate('/todo');
-    }, 1500);
+  };
+
+  const handleGetStarted = () => {
+    navigate('/todo');
   };
 
   // Fade-in animation for the card
@@ -131,6 +132,24 @@ function Welcome() {
             }}>
               "A journey of a thousand miles begins with a single step."
             </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleGetStarted}
+              sx={{
+                mt: 4,
+                borderRadius: 8,
+                fontWeight: 700,
+                fontSize: 18,
+                py: 1.2,
+                background: 'linear-gradient(90deg, #6366f1 0%, #22d3ee 100%)',
+                textTransform: 'none',
+                letterSpacing: 0.7,
+                boxShadow: '0 2px 8px #6366f122',
+              }}
+            >
+              Get Started
+            </Button>
           </>
         )}
       </Box>
